@@ -1,9 +1,6 @@
 # AppRegistry
 
-![JavaScript](https://shields.io)
-![TypeScript](https://shields.io)
-![Environment](https://shields.io)
-![License](https://shields.io)
+![Static Badge](https://img.shields.io/badge/JavaScript-ES6%2B-f7df1e?logo=javascript)
 
 Универсальная микро-библиотека на чистом JavaScript (ES6+) для управления глобальным состоянием, флагами и объектами модулей "в моменте". Инструмент разработан как полностью автономный, независимый компонент, готовый к переиспользованию в любом веб-проекте без привязки к конкретной платформе или бэкенд-стеку.
 
