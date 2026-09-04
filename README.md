@@ -1,10 +1,10 @@
 # AppRegistry
 
-![Static Badge](https://img.shields.io/badge/JavaScript-ES6%2B-f7df1e?logo=javascript)
-![Static Badge](https://img.shields.io/badge/TypeScript-Ready-3178c6?logo=typescript)
-![Static Badge](https://img.shields.io/badge/Environment-Browser-439563)
-![Static Badge](https://img.shields.io/badge/License-MIT-blue)
-![Static Badge](https://img.shields.io/badge/Status-in_progress-f39c12)
+![Static Badge](https://img.shields.io/badge/JavaScript-ES6%2B-green?logo=javascript)
+![Static Badge](https://img.shields.io/badge/TypeScript-upcomming-lightgray?logo=typescript)
+![Static Badge](https://img.shields.io/badge/Environment-Browser-green)
+![Static Badge](https://img.shields.io/badge/License-MIT-green)
+![Static Badge](https://img.shields.io/badge/Status-in_progress-orange)
 
 Универсальная микро-библиотека на чистом JavaScript (ES6+) для управления глобальным состоянием, флагами и объектами модулей "в моменте". Инструмент разработан как полностью автономный, независимый компонент, готовый к переиспользованию в любом веб-проекте без привязки к конкретной платформе или бэкенд-стеку.
 
