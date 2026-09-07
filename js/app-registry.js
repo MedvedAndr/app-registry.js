@@ -118,6 +118,13 @@ class AppRegistry {
     get(path, default_value = undefined) {
 		// Парсим путь в чистый список ключей
         const keys_list = this.#parsePath(path);
+
+		// Проверка, что путь не пустой
+        if (keys_list.length === 0) {
+            console.warn('AppRegistry.set(): Передан пустой путь.');
+
+            return false;
+        }
 	}
 
 	/**
