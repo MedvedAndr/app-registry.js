@@ -2,7 +2,7 @@
  * @file Глобальный реестр записей для модулей.
  * @description Обеспечивает единую точку входа (Singleton) для обмена
  * данными между изолированными JS-компонентами.
- * @version 0.1.0
+ * @version 0.1.1
  * @author Undead Medved {@link https://github.com/MedvedAndr GitHub}
  */
 
@@ -108,6 +108,14 @@ class AppRegistry {
         // Возврат успешного выполнения записи
         return true;
 	}
+
+	/**
+     * Получает значение из реестра по указанному пути
+     * @param {string|string[]} path - Путь для получения значения
+     * @param {*} [default_value=undefined] - Дефолтное значение, если путь не найден
+     * @returns {*} - Возвращает найденное значение или default_value
+     */
+    get(path, default_value = undefined) {}
 
 	/**
      * Внутренний метод для приведения любого пути к массиву ключей
