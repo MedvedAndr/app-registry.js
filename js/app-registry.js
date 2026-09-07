@@ -115,7 +115,10 @@ class AppRegistry {
      * @param {*} [default_value=undefined] - Дефолтное значение, если путь не найден
      * @returns {*} - Возвращает найденное значение или default_value
      */
-    get(path, default_value = undefined) {}
+    get(path, default_value = undefined) {
+		// Парсим путь в чистый список ключей
+        const keys_list = this.#parsePath(path);
+	}
 
 	/**
      * Внутренний метод для приведения любого пути к массиву ключей
