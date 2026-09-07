@@ -51,6 +51,33 @@ class AppRegistry {
     constructor() {
         // Конструктор намеренно пуст. Данные вносятся строго через метод set()
     }
+
+	/**
+     * Внутренний метод для приведения любого пути к массиву ключей
+     * @param {string|string[]} path - Путь (строка с точками или массив)
+     * @returns {string[]} - Массив ключей
+     */
+    #parsePath(path) {
+        let keys_list;
+
+        // Если путь это не пустая строка, разделяем её по точке (поддержка точечной нотации)
+        if (typeof path === 'string' && path.trim() !== '') {
+            keys_list = path.split('.');
+        }
+        // Если путь это массив, то приводим все его элементы к строке (поддержка списка ключей)
+        else if (Array.isArray(path) && path.length > 0) {
+            keys_list = path.map(String);
+        }
+		// Все не поддерживаемые форматы пути вернут пустой массив
+		else {
+			keys_list = [];
+		}
+
+		// Очищаем список от пустых ключей
+        keys_list = keys_list.filter(key_item => key_item.trim() !== '');
+		
+        return keys_list;
+    }
 }
 
 const appRegistry = new AppRegistry();
