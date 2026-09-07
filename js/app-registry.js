@@ -59,7 +59,8 @@ class AppRegistry {
      * @returns {boolean} - Статус успеха операции
      */
     set(path, value) {
-		
+		// Парсим путь в чистый список ключей
+        const keys_list = this.#parsePath(path);
 	}
 
 	/**
