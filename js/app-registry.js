@@ -83,6 +83,19 @@ class AppRegistry {
             if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
                 current_node[k] = {};
             }
+			// Если узел есть, проверяем его тип. Он обязан быть объектом (не строкой, не null, не массивом/списком)
+            else if (
+                typeof current_node[k] !== 'object' ||
+                current_node[k] === null ||
+                Array.isArray(current_node[k])
+            ) {
+                // Если там лежит не объект — это конфликт. Склеиваем пройденный путь для понятного сообщения
+                const current_node_path = keys_list.slice(0, i + 1).join('.');
+                console.warn(`AppRegistry.set(): Конфликт путей. Узел "${current_node_path}" не является объектом.`);
+
+                // Запись заблокирована, аварийно выходим
+                return false;
+            }
             
             // Передвигаем "курсор" на один уровень вглубь
             current_node = current_node[k];
