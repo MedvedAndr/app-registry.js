@@ -121,7 +121,7 @@ class AppRegistry {
 
 		// Проверка, что путь не пустой
         if (keys_list.length === 0) {
-            console.warn('AppRegistry.set(): Передан пустой путь.');
+            console.warn('AppRegistry.get(): Передан пустой путь.');
 
             return false;
         }
