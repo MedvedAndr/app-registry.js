@@ -4,7 +4,8 @@
 ![Static Badge](https://img.shields.io/badge/TypeScript-upcomming-lightgray?logo=typescript)
 ![Static Badge](https://img.shields.io/badge/Environment-Browser-green)
 ![Static Badge](https://img.shields.io/badge/License-MIT-green)
-![Static Badge](https://img.shields.io/badge/Status-v0.1.0--alpha-yellow)
+![Static Badge](https://img.shields.io/badge/Status-in_progress-orange)
+![Static Badge](https://img.shields.io/badge/Stable_version-v0.1.0--alpha-blue)
 
 Универсальная микро-библиотека на чистом JavaScript (ES6+) для управления глобальным состоянием, флагами и объектами модулей "в моменте". Инструмент разработан как полностью автономный, независимый компонент, готовый к переиспользованию в любом веб-проекте без привязки к конкретной платформе или бэкенд-стеку.
 
