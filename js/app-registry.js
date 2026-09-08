@@ -143,6 +143,15 @@ class AppRegistry {
 
             // Передвигаем наш "курсор" на один уровень вглубь
             current_node = current_node[k];
+
+			// Проверка текущего узла на корректность типа
+            if (
+                typeof current_node !== 'object' ||
+                current_node === null ||
+                Array.isArray(current_node)
+            ) {
+                return default_value;
+            }
         }
 	}
 
