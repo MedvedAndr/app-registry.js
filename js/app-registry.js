@@ -51,7 +51,10 @@
 
 class AppRegistry {
 	// Приватное хранилище данных
-	#app_registry = {};
+	#app_registry = Object.create(null);
+
+	// Ключи, способные изменить цепочку прототипов обычных объектов
+	#unsafe_keys = new Set(['__proto__', 'prototype', 'constructor']);
 
     /**
      * Конструктор класса
@@ -78,6 +81,13 @@ class AppRegistry {
             return false;
         }
 
+		// Блокируем ключи, которые могут изменить прототип хранилища или переданного объекта
+		if (keys_list.some(key_item => this.#unsafe_keys.has(key_item))) {
+			console.warn('AppRegistry.set(): Путь содержит недопустимый ключ.');
+
+			return false;
+		}
+
 		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
         let current_node = this.#app_registry;
         // Запоминаем индекс самого последнего ключа в пути
@@ -90,7 +100,14 @@ class AppRegistry {
 
             // Если такого узла еще нет — создаем пустой объект
             if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
-                current_node[k] = {};
+				try {
+					current_node[k] = Object.create(null);
+				}
+				catch (error) {
+					console.warn(`AppRegistry.set(): Не удалось создать узел "${k}".`, error);
+
+					return false;
+				}
             }
 			// Если узел есть, проверяем его тип. Он обязан быть объектом (не строкой, не null, не массивом/списком)
             else if (
@@ -112,7 +129,14 @@ class AppRegistry {
 
 		// Записываем переданное значение в самый последний ключ пути
         const last_key = keys_list[last_index];
-        current_node[last_key] = value;
+		try {
+			current_node[last_key] = value;
+		}
+		catch (error) {
+			console.warn(`AppRegistry.set(): Не удалось записать значение по пути "${keys_list.join('.')}".`, error);
+
+			return false;
+		}
 
         // Возврат успешного выполнения записи
         return true;
@@ -132,8 +156,13 @@ class AppRegistry {
         if (keys_list.length === 0) {
             console.warn('AppRegistry.get(): Передан пустой путь.');
 
-            return false;
+			return default_value;
         }
+
+		// Недопустимые ключи не могут присутствовать в реестре
+		if (keys_list.some(key_item => this.#unsafe_keys.has(key_item))) {
+			return default_value;
+		}
 
 		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
         let current_node = this.#app_registry;
@@ -194,8 +223,10 @@ class AppRegistry {
 			keys_list = [];
 		}
 
-		// Очищаем конечный список от пустых ключей
-        keys_list = keys_list.filter(key_item => key_item.trim() !== '');
+		// Удаляем окружающие пробелы и очищаем конечный список от пустых ключей
+		keys_list = keys_list
+			.map(key_item => key_item.trim())
+			.filter(key_item => key_item !== '');
 		
         return keys_list;
     }
