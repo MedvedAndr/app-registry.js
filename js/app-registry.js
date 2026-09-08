@@ -153,6 +153,15 @@ class AppRegistry {
                 return default_value;
             }
         }
+
+		// Проверяем наличие последнего узла и выводим данные
+        const last_key = keys_list[last_index];
+        if (Object.prototype.hasOwnProperty.call(current_node, last_key)) {
+            return current_node[last_key];
+        }
+        else {
+            return default_value;
+        }
 	}
 
 	/**
