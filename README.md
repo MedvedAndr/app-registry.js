@@ -1,8 +1,9 @@
 # AppRegistry
 
+![Static Badge](https://img.shields.io/badge/Environment-Browser-green)
 ![Static Badge](https://img.shields.io/badge/JavaScript-ES6%2B-green?logo=javascript)
 ![Static Badge](https://img.shields.io/badge/TypeScript-upcomming-lightgray?logo=typescript)
-![Static Badge](https://img.shields.io/badge/Environment-Browser-green)
+
 ![Static Badge](https://img.shields.io/badge/License-MIT-green)
 ![Static Badge](https://img.shields.io/badge/Status-in_progress-orange)
 ![Static Badge](https://img.shields.io/badge/Stable_version-v0.1.0--alpha-blue)
