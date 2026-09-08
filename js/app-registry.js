@@ -141,7 +141,7 @@ class AppRegistry {
                 return default_value;
             }
 
-            // Передвигаем наш "курсор" на один уровень вглубь
+            // Передвигаем "курсор" на один уровень вглубь
             current_node = current_node[k];
 
 			// Проверка текущего узла на корректность типа
@@ -185,7 +185,7 @@ class AppRegistry {
 			keys_list = [];
 		}
 
-		// Очищаем список от пустых ключей
+		// Очищаем конечный список от пустых ключей
         keys_list = keys_list.filter(key_item => key_item.trim() !== '');
 		
         return keys_list;
