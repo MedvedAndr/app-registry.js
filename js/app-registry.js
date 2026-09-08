@@ -234,4 +234,4 @@ class AppRegistry {
 
 const appRegistry = new AppRegistry();
 
-export { appRegistry };
+export { AppRegistry, appRegistry };
