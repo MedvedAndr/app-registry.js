@@ -179,31 +179,54 @@ class AppRegistry {
 
 		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
         let current_node = this.#app_registry;
-        // Запоминаем индекс самого последнего ключа в пути
+		
+		// Запускаем рекурсивное удаление
+		return this.#checkForDelete(current_node, keys_list);
+    }
+
+	/**
+     * Внутренний рекурсивный метод для удаления ключей и схлопывания пустых промежуточных узлов
+     * @param {Object} current_node - Текущий уровень объекта
+     * @param {string[]} keys_list - Массив ключей пути
+     * @param {number} index - Текущий индекс обрабатываемого ключа
+     * @returns {boolean} - Статус успеха операции
+     */
+    #checkForDelete(current_node, keys_list, index = 0) {
+        const k = keys_list[index];
         const last_index = keys_list.length - 1;
+        let status;
 
-        // Перемещаемся вглубь, перебирая узлы строго до предпоследнего шага
-        for (let i = 0; i < last_index; i++) {
-            // Берем ключ текущего узла
-            const k = keys_list[i];
+        // Если ключа изначально нет, то удалять нечего, возвращаем true
+        if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
+            return true;
+        }
 
-            // Проверяем отсутствие текущего ключа в текущем узле для выхода из метода
-            if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
+        if (index < last_index) {
+            // Проверяем безопасность типа перед погружением
+            if (
+                typeof current_node[k] !== 'object' ||
+                current_node[k] === null ||
+                Array.isArray(current_node[k])
+            ) {
+                const current_node_path = keys_list.slice(0, index + 1).join('.');
+                console.warn(`AppRegistry.remove(): Конфликт путей. Узел "${current_node_path}" не является объектом.`);
+
                 return false;
             }
 
-            // Передвигаем "курсор" на один уровень вглубь
-            current_node = current_node[k];
+            status = this.#checkForDelete(current_node[k], keys_list, index + 1);
 
-            // Проверка текущего узла на корректность типа
-            if (
-                typeof current_node !== 'object' ||
-                current_node === null ||
-                Array.isArray(current_node)
-            ) {
-                return false;
+            // Обратный ход рекурсии: если узел опустел — удаляем его из памяти
+            if (Object.keys(current_node[k]).length === 0) {
+                delete current_node[k];
             }
         }
+        else {
+            delete current_node[k];
+            return true;
+        }
+
+        return status;
     }
 
 	/**
