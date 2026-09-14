@@ -162,6 +162,14 @@ class AppRegistry {
 	}
 
 	/**
+     * Получает все значения из реестра
+     * @returns {Object} - Возвращает глубокую изолированную копию данных реестра без прототипа
+     */
+    getAll() {
+        return Object.assign(Object.create(null), structuredClone(this.#app_registry));
+    }
+
+	/**
      * Удаляет из реестра узел по указанному пути
      * @param {string|string[]} path - Путь для удаления узла
      * @returns {boolean} - Статус успеха операции
