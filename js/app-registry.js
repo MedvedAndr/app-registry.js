@@ -211,7 +211,15 @@ class AppRegistry {
      * @returns {boolean} - Статус наличия ключа
      */
     has(path) {
-        
+        // Парсим путь в чистый список ключей
+        const keys_list = this.#parsePath(path);
+
+        // Проверка, что путь не пустой
+        if (keys_list.length === 0) {
+            console.warn('AppRegistry.get(): Передан пустой путь.');
+
+            return false;
+        }
     }
 
 	/**
