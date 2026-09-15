@@ -220,6 +220,34 @@ class AppRegistry {
 
             return false;
         }
+
+		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
+        let current_node = this.#app_registry;
+        // Запоминаем индекс самого последнего ключа в пути
+        const last_index = keys_list.length - 1;
+
+        // Перемещаемся вглубь, перебирая узлы строго до предпоследнего шага
+        for (let i = 0; i < last_index; i++) {
+            // Берем ключ текущего узла
+            const k = keys_list[i];
+
+            // Проверяем отсутствие текущего ключа в текущем узле
+            if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
+                return false;
+            }
+
+            // Передвигаем "курсор" на один уровень вглубь
+            current_node = current_node[k];
+
+            // Проверка текущего узла на корректность типа
+            if (
+                typeof current_node !== 'object' ||
+                current_node === null ||
+                Array.isArray(current_node)
+            ) {
+                return false;
+            }
+        }
     }
 
 	/**
