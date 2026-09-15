@@ -248,6 +248,14 @@ class AppRegistry {
                 return false;
             }
         }
+
+		// Проверяем отсутствие последнего узла
+        const last_key = keys_list[last_index];
+        if (!Object.prototype.hasOwnProperty.call(current_node, last_key)) {
+            return false;
+        }
+
+        return true;
     }
 
 	/**
