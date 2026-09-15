@@ -117,49 +117,27 @@ class AppRegistry {
 		// Парсим путь в чистый список ключей
         const keys_list = this.#parsePath(path);
 
-		// Проверка, что путь не пустой
+        // Проверка, что путь не пустой
         if (keys_list.length === 0) {
             console.warn('AppRegistry.get(): Передан пустой путь.');
 
             return false;
         }
-
-		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
-        let current_node = this.#app_registry;
-        // Запоминаем индекс самого последнего ключа в пути
-        const last_index = keys_list.length - 1;
-
-        // Перемещаемся вглубь, перебирая узлы строго до предпоследнего шага
-        for (let i = 0; i < last_index; i++) {
-            // Берем ключ текущего узла
-            const k = keys_list[i];
-
-            // Проверяем отсутствие текущего ключа в текущем узле для вывода значения по умолчанию
-            if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
-                return default_value;
-            }
-
-            // Передвигаем "курсор" на один уровень вглубь
-            current_node = current_node[k];
-
-			// Проверка текущего узла на корректность типа
-            if (
-                typeof current_node !== 'object' ||
-                current_node === null ||
-                Array.isArray(current_node)
-            ) {
-                return default_value;
-            }
-        }
-
-		// Проверяем наличие последнего узла и выводим данные
-        const last_key = keys_list[last_index];
-        if (Object.prototype.hasOwnProperty.call(current_node, last_key)) {
-            return current_node[last_key];
-        }
-        else {
+        
+        const last_cursor = this.#getLastCursor(keys_list);
+        
+        if (last_cursor === null) {
             return default_value;
         }
+        
+        const last_index = keys_list.length - 1;
+        const last_key = keys_list[last_index];
+        
+        if (!Object.prototype.hasOwnProperty.call(last_cursor, last_key)) {
+            return default_value;
+        }
+        
+        return last_cursor[last_key];
 	}
 
 	/**
@@ -216,46 +194,21 @@ class AppRegistry {
 
         // Проверка, что путь не пустой
         if (keys_list.length === 0) {
-            console.warn('AppRegistry.get(): Передан пустой путь.');
+            console.warn('AppRegistry.has(): Передан пустой путь.');
 
             return false;
         }
-
-		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
-        let current_node = this.#app_registry;
-        // Запоминаем индекс самого последнего ключа в пути
+        
+        const last_cursor = this.#getLastCursor(keys_list);
+        
+        if (last_cursor === null) {
+            return false;
+        }
+        
         const last_index = keys_list.length - 1;
-
-        // Перемещаемся вглубь, перебирая узлы строго до предпоследнего шага
-        for (let i = 0; i < last_index; i++) {
-            // Берем ключ текущего узла
-            const k = keys_list[i];
-
-            // Проверяем отсутствие текущего ключа в текущем узле
-            if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
-                return false;
-            }
-
-            // Передвигаем "курсор" на один уровень вглубь
-            current_node = current_node[k];
-
-            // Проверка текущего узла на корректность типа
-            if (
-                typeof current_node !== 'object' ||
-                current_node === null ||
-                Array.isArray(current_node)
-            ) {
-                return false;
-            }
-        }
-
-		// Проверяем отсутствие последнего узла
         const last_key = keys_list[last_index];
-        if (!Object.prototype.hasOwnProperty.call(current_node, last_key)) {
-            return false;
-        }
-
-        return true;
+        
+        return Object.prototype.hasOwnProperty.call(last_cursor, last_key);
     }
 
 	/**
@@ -301,6 +254,43 @@ class AppRegistry {
         }
 
         return status;
+    }
+
+	/**
+     * Внутренний метод для безопасного поиска предфинального (родительского) узла
+     * @param {string[]} keys_list - Массив очищенных ключей пути
+     * @returns {Object|null} - Возвращает целевой объект вложенности или null при недостижимости пути / конфликте типов
+     */
+    #getLastCursor(keys_list) {
+        // Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
+        let current_node = this.#app_registry;
+        // Запоминаем индекс самого последнего ключа в пути
+        const last_index = keys_list.length - 1;
+
+        // Перемещаемся вглубь, перебирая узлы строго до предпоследнего шага
+        for (let i = 0; i < last_index; i++) {
+            // Берем ключ текущего узла
+            const k = keys_list[i];
+            
+            // Проверяем отсутствие текущего ключа в текущем узле
+            if (!Object.prototype.hasOwnProperty.call(current_node, k)) {
+                return null;
+            }
+
+            // Передвигаем "курсор" на один уровень вглубь
+            current_node = current_node[k];
+            
+            // Проверка текущего узла на корректность типа
+            if (
+                typeof current_node !== 'object' ||
+                current_node === null ||
+                Array.isArray(current_node)
+            ) {
+                return null;
+            }
+        }
+
+        return current_node;
     }
 
 	/**
