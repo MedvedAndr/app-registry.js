@@ -57,15 +57,10 @@ class AppRegistry {
      * @returns {boolean} - Статус успеха операции
      */
     set(path, value) {
-		// Парсим путь в чистый список ключей
-        const keys_list = this.#parsePath(path);
-
-		// Проверка, что путь не пустой
-        if (keys_list.length === 0) {
-            console.warn('AppRegistry.set(): Передан пустой путь.');
-
-            return false;
-        }
+		const keys_list = #parsePathAndValidateEmpty(path, 'set');
+        
+        // Проверка, что путь не пустой
+        if (!keys_list) return false;
 
 		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
         let current_node = this.#app_registry;
@@ -114,15 +109,10 @@ class AppRegistry {
      * @returns {*} - Возвращает найденное значение или default_value
      */
     get(path, default_value = undefined) {
-		// Парсим путь в чистый список ключей
-        const keys_list = this.#parsePath(path);
-
+		const keys_list = #parsePathAndValidateEmpty(path, 'get');
+        
         // Проверка, что путь не пустой
-        if (keys_list.length === 0) {
-            console.warn('AppRegistry.get(): Передан пустой путь.');
-
-            return false;
-        }
+        if (!keys_list) return false;
         
         const last_cursor = this.#getLastCursor(keys_list);
         
@@ -154,15 +144,10 @@ class AppRegistry {
      * @returns {boolean} - Статус успеха операции
      */
     remove(path) {
-        // Парсим путь в чистый список ключей
-        const keys_list = this.#parsePath(path);
-
+        const keys_list = #parsePathAndValidateEmpty(path, 'remove');
+        
         // Проверка, что путь не пустой
-        if (keys_list.length === 0) {
-            console.warn('AppRegistry.remove(): Передан пустой путь.');
-
-            return false;
-        }
+        if (!keys_list) return false;
 
 		// Создаем "курсор" для навигации вглубь объекта. Содержит текущий уровень вложенности.
         let current_node = this.#app_registry;
@@ -189,15 +174,10 @@ class AppRegistry {
      * @returns {boolean} - Статус наличия ключа
      */
     has(path) {
-        // Парсим путь в чистый список ключей
-        const keys_list = this.#parsePath(path);
-
+        const keys_list = #parsePathAndValidateEmpty(path, 'has');
+        
         // Проверка, что путь не пустой
-        if (keys_list.length === 0) {
-            console.warn('AppRegistry.has(): Передан пустой путь.');
-
-            return false;
-        }
+        if (!keys_list) return false;
         
         const last_cursor = this.#getLastCursor(keys_list);
         
@@ -291,6 +271,24 @@ class AppRegistry {
         }
 
         return current_node;
+    }
+
+	/**
+     * Внутренний метод парсит путь и проводит проверку на пустоту
+     * @param {string|string[]} path - Путь (строка с точками или массив)
+	 * @param {string} method - Метод, от имени которого вызвали проверку
+     * @returns {string[]|null} - Массив ключей или null (если валидация не пройдена)
+     */
+	#parsePathAndValidateEmpty(path, method) {
+        const keys_list = this.#parsePath(path);
+        
+        if (keys_list.length === 0) {
+            console.warn(`AppRegistry.${method}(): Передан пустой путь.`);
+            
+            return null;
+        }
+
+        return keys_list;
     }
 
 	/**
